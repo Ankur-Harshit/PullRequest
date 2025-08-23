@@ -11,6 +11,7 @@ const Feed = () => {
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
   const limit = 10;
+  const [randomIndex, setRandomIndex] = useState(0);
 
   const getFeed = async ()=> {
     // if(feed) return;
@@ -26,6 +27,8 @@ const Feed = () => {
   useEffect(()=>{
     getFeed();
   }, []); // whenever page changes it loads
+
+  
   // Add Shimmer UI
   if (!feed || feed.length <= 0) 
   return (
