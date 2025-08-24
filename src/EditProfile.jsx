@@ -45,7 +45,6 @@ const EditProfile = ({ user }) => {
         withCredentials: true,
         headers: { "Content-Type": "multipart/form-data" },
       });
-      console.log(res?.data?.imageUrl);
       setPhotourl(res?.data?.imageUrl);
       dispatch(addUser(res?.data?.data));
 

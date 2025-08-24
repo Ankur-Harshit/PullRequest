@@ -4,6 +4,7 @@ import { BASE_URL } from "./utils/constants";
 import { useDispatch, useSelector } from "react-redux";
 import { addConnection } from "./utils/connectionSlice";
 import Shimmer from "./components/Shimmer";
+import { Link } from "react-router-dom";
 
 const Connections = () => {
   const dispatch = useDispatch();
@@ -39,10 +40,10 @@ const Connections = () => {
 
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-10">
       {connections.map((connection, index) => {
-        const { firstName, lastName, age, photoUrl, about, gender } = connection;
+        const { _id, firstName, lastName, age, photoUrl, about, gender } = connection;
         return (
           <div
-            key={index}
+            key={_id}
             className="bg-white/10 backdrop-blur-xl border border-white/10 rounded-3xl shadow-lg overflow-hidden 
                        transform transition-all duration-300 hover:-translate-y-3 hover:scale-101 
                        hover:shadow-[0_0_25px_rgba(236,72,153,0.4)]"
@@ -72,12 +73,13 @@ const Connections = () => {
                 “{about || "No bio yet"}”
               </p>
 
-              <button className="mt-4 bg-gradient-to-r from-black to-indigo-500 
+              <Link to={"/chat/"+_id}><button className="mt-4 bg-gradient-to-r from-black to-indigo-500 
                                  text-white py-2 px-5 text-sm font-semibold 
                                  hover:opacity-90 transition-all shadow-md 
                                  hover:shadow-[0_0_20px_rgba(139,92,246,0.5)]">
                 💬 Message
               </button>
+              </Link>
             </div>
           </div>
         );
