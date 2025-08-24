@@ -44,61 +44,75 @@ const Requests = () => {
     );
 
   return (
-    <div className="w-full min-h-screen bg-gradient-to-b from-[#0f0c29] via-[#302b63] to-[#24243e] px-4 pt-10 pb-32">
-      <h1 className="text-4xl sm:text-5xl font-bold text-center mb-12 text-pink-400 drop-shadow tracking-tight">
-        💌 Requests Received
-      </h1>
+  <div className="w-full min-h-screen bg-gradient-to-b from-[#0a0a0f] via-[#1a1a2e] to-[#000000] px-4 pt-12 pb-32">
+    <h1 className="text-4xl sm:text-2xl font-bold text-center mb-16 tracking-tight 
+                   bg-clip-text text-transparent bg-gradient-to-r from-blue-400  to-white 
+                   ">
+      Requests Received
+    </h1>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-8 justify-items-center">
-        {request.map((req, index) => {
-          const { firstName, lastName, age, photoUrl, about, gender } = req.fromUserId;
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-10 justify-items-center">
+      {request.map((req, index) => {
+        const { firstName, lastName, age, photoUrl, about, gender } = req.fromUserId;
 
-          return (
-            <div
-              key={index}
-              className="bg-white/5 backdrop-blur-md rounded-2xl shadow-lg overflow-hidden transform transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl w-full max-w-[320px]"
-            >
-              <div className="relative">
-                <img
-                  alt="profile"
-                  src={photoUrl}
-                  className="w-full h-64 object-cover"
-                />
-                <div className="absolute top-3 right-3 bg-white/10 text-white px-3 py-1 rounded-full shadow text-sm">
-                  💖
-                </div>
-              </div>
+        return (
+          <div
+            key={index}
+            className="bg-white/10 backdrop-blur-xl border border-white/10 
+                       rounded-2xl shadow-lg overflow-hidden w-full max-w-[320px] 
+                       transform transition-all duration-300 
+                       hover:-translate-y-3 hover:scale-101 
+                       hover:shadow-[0_0_25px_rgba(236,72,153,0.4)]"
+          >
+            {/* Profile Image */}
+            <div className="relative">
+              <img
+                alt="profile"
+                src={photoUrl}
+                className="w-full h-64 object-cover"
+              />
+            </div>
 
-              <div className="p-4 flex flex-col gap-2 text-white">
-                <h2 className="text-lg sm:text-xl font-bold text-pink-300">
-                  {firstName} {lastName}, <span className="text-pink-500">{age}</span>
-                </h2>
-                <p className="text-sm text-gray-300 capitalize">{gender}</p>
-                <p className="text-sm italic text-gray-400 line-clamp-3">
-                  “{about || "No bio yet"}”
-                </p>
+            {/* Info Section */}
+            <div className="p-5 flex flex-col gap-3 text-white">
+              <h2 className="text-lg sm:text-xl font-bold leading-tight">
+                {firstName} {lastName},{" "}
+                <span className="text-pink-400">{age}</span>
+              </h2>
+              <p className="text-sm text-gray-400 capitalize">{gender}</p>
+              <p className="text-sm italic text-gray-300 line-clamp-3">
+                “{about || "No bio yet"}”
+              </p>
 
-                <div className="mt-4 flex justify-between gap-2">
-                  <button
-                    className="w-1/2 bg-green-500 hover:bg-green-600 text-white py-2 rounded-full text-sm font-semibold transition"
-                    onClick={() => reviewRequest("accepted", req._id)}
-                  >
-                    Accept
-                  </button>
-                  <button
-                    className="w-1/2 bg-red-500 hover:bg-red-600 text-white py-2 rounded-full text-sm font-semibold transition"
-                    onClick={() => reviewRequest("rejected", req._id)}
-                  >
-                    Reject
-                  </button>
-                </div>
+              {/* Action Buttons */}
+              <div className="mt-5 flex justify-between gap-3">
+                <button
+                  className="w-1/2 py-2 rounded-full text-sm font-semibold transition 
+                             bg-gradient-to-r from-green-500 to-emerald-600 
+                             hover:from-green-400 hover:to-emerald-500 
+                             shadow-md hover:shadow-green-500/40"
+                  onClick={() => reviewRequest("accepted", req._id)}
+                >
+                  ✅ Accept
+                </button>
+                <button
+                  className="w-1/2 py-2 rounded-full text-sm font-semibold transition 
+                             bg-gradient-to-r from-red-500 to-rose-600 
+                             hover:from-red-400 hover:to-rose-500 
+                             shadow-md hover:shadow-red-500/40"
+                  onClick={() => reviewRequest("rejected", req._id)}
+                >
+                  ❌ Reject
+                </button>
               </div>
             </div>
-          );
-        })}
-      </div>
+          </div>
+        );
+      })}
     </div>
-  );
+  </div>
+);
+
 };
 
 export default Requests;

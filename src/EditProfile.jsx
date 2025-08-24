@@ -96,7 +96,7 @@ const EditProfile = ({ user }) => {
           </div>
 
           <div>
-            <label className="font-semibold">Gender</label>
+            <label className="font-semibold">Gender (only write male/female not in capitals)</label>
             <input
               type="text"
               className="input input-bordered w-full mt-1 bg-black text-white border-gray-700"

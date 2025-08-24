@@ -6,30 +6,23 @@ import { useDispatch } from "react-redux";
 import { removeFeed } from "./utils/feedSlice";
 
 const UserCard = ({ user }) => {
-  const {_id, firstName, lastName, age, photoUrl, about, gender } = user;
+  const { _id, firstName, lastName, age, photoUrl, about, gender } = user;
   const dispatch = useDispatch();
 
   const handleInterested = async () => {
-    try{
-      const res = axios.post(BASE_URL+"/request/send/interested/"+_id, {}, {
-        withCredentials: true,
-      });
+    try {
+      await axios.post(BASE_URL + "/request/send/interested/" + _id, {}, { withCredentials: true });
       dispatch(removeFeed(_id));
-    }
-    catch(err){
+    } catch (err) {
       console.log(err);
     }
-
   };
 
   const handleIgnore = async () => {
-    try{
-      const res = axios.post(BASE_URL+"/request/send/ignored/"+_id, {}, {
-        withCredentials: true,
-      });
+    try {
+      await axios.post(BASE_URL + "/request/send/ignored/" + _id, {}, { withCredentials: true });
       dispatch(removeFeed(_id));
-    }
-    catch(err){
+    } catch (err) {
       console.log(err);
     }
   };
@@ -42,40 +35,38 @@ const UserCard = ({ user }) => {
     trackMouse: true,
   });
 
-  
-
   return (
     <div
       {...handlers}
-      className="w-full max-w-xs bg-white/10 backdrop-blur-md text-white rounded-2xl overflow-hidden shadow-xl transform transition duration-300 hover:scale-105"
+      className="w-[280px] sm:w-[320px] bg-[#1a1a1d]/90 backdrop-blur-md text-white rounded-xl overflow-hidden shadow-2xl transform transition duration-300 hover:scale-105 border border-gray-800"
     >
-      <figure className="h-80 w-full overflow-hidden">
+      <figure className="h-64 w-full overflow-hidden">
         <img
           src={photoUrl}
           alt="Profile Pic"
           className="w-full h-full object-cover"
         />
       </figure>
-      <div className="p-5 flex flex-col gap-2">
-        <h2 className="text-xl font-semibold">
+      <div className="p-4 flex flex-col gap-2">
+        <h2 className="text-lg font-semibold">
           {firstName} {lastName}
         </h2>
-        <p className="text-pink-300 text-sm font-medium">
+        <p className="text-pink-400 text-xs font-medium">
           {age} · {gender}
         </p>
-        <p className="text-gray-200 text-sm italic">
+        <p className="text-gray-300 text-sm italic line-clamp-3">
           {about || "No bio provided."}
         </p>
 
-        <div className="flex justify-around mt-4">
+        <div className="flex justify-around mt-3">
           <button
-            className="bg-pink-500 hover:bg-pink-600 text-white font-semibold px-4 py-2 rounded-full shadow transition"
+            className="bg-pink-600 hover:bg-pink-700 text-white font-semibold px-3 py-1.5 rounded-full shadow transition text-sm"
             onClick={handleInterested}
           >
             Interested
           </button>
           <button
-            className="bg-gray-700 hover:bg-gray-800 text-white font-semibold px-4 py-2 rounded-full shadow transition"
+            className="bg-gray-800 hover:bg-gray-900 text-white font-semibold px-3 py-1.5 rounded-full shadow transition text-sm"
             onClick={handleIgnore}
           >
             Ignore
