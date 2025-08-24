@@ -8,7 +8,7 @@ import appStore from "./utils/appStore"
 import Feed from "./Feed"
 import Connections from "./Connections"
 import SignUp from "./components/SignUp"
-import Chat from "./components/chat"
+import Chat from "./components/Chat"
 
 function App() {
   return (
