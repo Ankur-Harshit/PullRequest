@@ -5,6 +5,7 @@ import { BASE_URL } from "./utils/constants";
 import { useEffect, useState } from "react";
 import UserCard from "./UserCard";
 import Shimmer from "./components/Shimmer";
+import FeedShimmer from "./components/FeedShimmer";
 
 const Feed = () => {
   const feed = useSelector((store) => store.feed);
@@ -30,16 +31,22 @@ const Feed = () => {
 
   if (!feed || feed.length <= 0)
     return (
-      <div className="w-full flex flex-col items-center justify-center min-h-screen bg-[#0a0a0f] text-white">
-        <Shimmer />
-        <button
-          onClick={getFeed}
-          className="mt-6 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white text-lg font-semibold rounded-2xl shadow-lg transition-all duration-200"
-        >
-          Load More
-        </button>
-      </div>
-    );
+  <div className="w-full flex items-center justify-center min-h-screen bg-[#0a0a0f] text-white">
+    <div className="relative w-full flex items-center justify-center">
+      {/* Shimmer */}
+      <FeedShimmer />
+
+      {/* Overlay Button */}
+      <button
+        onClick={getFeed}
+        className="absolute px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white text-lg font-semibold rounded-2xl shadow-lg"
+      >
+        Load More
+      </button>
+    </div>
+  </div>
+);
+
 
   return (
     feed && (

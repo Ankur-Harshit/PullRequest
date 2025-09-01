@@ -2,14 +2,50 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { createSocketConnection } from "../utils/socket";
 import { useSelector } from "react-redux";
+import { BASE_URL } from "../utils/constants";
+import axios from 'axios';
 
 const Chat = () => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
+  const [targetPhotoUrl, setTargetPhotoUrl] = useState();
+  const [targetName, setTargetName] = useState();
   const { targetUserId } = useParams();
   const user = useSelector((store)=>store.user);
   const userId = user?._id;
   const now = new Date();
+
+  const fetchPhoto = async()=>{
+    const res = await axios.get(BASE_URL+"/chat/photo/"+targetUserId,{
+      withCredentials: true,
+    });
+    setTargetPhotoUrl(res?.data?.data?.photoUrl);
+    setTargetName(res?.data?.data?.firstName);
+  }
+
+  const fetchMessages = async ()=>{
+    const chat = await axios.get(BASE_URL + "/chat/" + targetUserId,{
+      withCredentials: true,
+    });
+    const chatMessages = chat.data?.messages?.map((msg)=>{
+      return{
+        firstName: msg?.senderId?.firstName,
+        lastName: msg?.senderId?.lastName,
+        text: msg?.text,
+        userId: msg?.senderId?._id,
+        targetUserId: targetUserId,
+        time: msg?.time,
+      };
+    });
+    setMessages(chatMessages);
+  }
+  useEffect(()=>{
+    fetchMessages();
+  }, []);
+
+  useEffect(()=>{
+    fetchPhoto();
+  }, []);
 
   useEffect(()=>{
     if(!user) return;
@@ -17,9 +53,9 @@ const Chat = () => {
     // as soon as the page loads, the socket connection is made and joinChat Event is emitted
     socket.emit("joinChat", {firstName: user.firstName ,userId, targetUserId}); // handle event in backend
 
-    socket.on("messageRecieved", ({firstName, text, userId, time,})=>{
+    socket.on("messageRecieved", ({firstName, lastName, text, userId, time,})=>{
 
-        setMessages((messages)=>[...messages, {firstName, text, userId, time,}]); // do this to append in state variables
+        setMessages((messages)=>[...messages, {firstName, lastName ,text, userId, time,}]); // do this to append in state variables
     });
 
     return ()=>{
@@ -30,7 +66,7 @@ const Chat = () => {
   const sendMessage = ()=>{
     const socket = createSocketConnection();
     socket.emit("sendMessage", 
-        {firstName: user.firstName ,userId, targetUserId, text:newMessage, time:now.toLocaleTimeString(),});
+        {firstName: user.firstName ,lastName: user.lastName, userId, targetUserId, text:newMessage, time:now.toLocaleTimeString(),});
     setNewMessage("");
   };
 
@@ -38,8 +74,9 @@ const Chat = () => {
   <div className="w-full sm:w-2/3 lg:w-1/2 mx-auto bg-gradient-to-b from-gray-900 to-black border border-gray-700 rounded-2xl shadow-xl m-5 h-[85vh] flex flex-col overflow-hidden">
     
     {/* Header */}
-    <h1 className="p-5 border-b border-gray-700 text-xl font-semibold text-gray-200 bg-gray-800 sticky top-0">
-      💬 Chat
+    <h1 className="p-2 border-b border-gray-700 text-xl font-semibold text-gray-200 bg-gray-800 sticky top-0 flex items-center gap-3">
+      <img className="h-12 w-12 rounded-full object-cover border-3 border-black" src={targetPhotoUrl}></img>
+      {targetName}
     </h1>
 
     {/* Messages */}
@@ -56,7 +93,7 @@ const Chat = () => {
           >
             {/* Header */}
             <div className="flex items-center gap-2 text-xs text-gray-400 mb-1">
-              <span className="font-medium text-gray-300">{msg.firstName}</span>
+              <span className="font-medium text-gray-300">{msg.firstName+" "+msg.lastName}</span>
               <time>{msg.time}</time>
             </div>
 

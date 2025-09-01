@@ -1,14 +1,17 @@
 import axios from 'axios';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BASE_URL } from './utils/constants';
 import { addRequest, removeRequest } from './utils/requestSlice';
 import { removeConnection } from './utils/connectionSlice';
 import Shimmer from './components/Shimmer';
+import Toast from './components/Toast';
 
 const Requests = () => {
   const dispatch = useDispatch();
   const request = useSelector((store) => store.request);
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState();
 
   const fetchRequests = async () => {
     try {
@@ -27,6 +30,11 @@ const Requests = () => {
         { withCredentials: true }
       );
       dispatch(removeRequest(_id));
+      setShowToast(true);
+      setToastMessage(status);
+      setTimeout(()=>{
+        setShowToast(false);
+      },4000);
     } catch (err) {}
   };
 
@@ -45,6 +53,9 @@ const Requests = () => {
 
   return (
   <div className="w-full min-h-screen bg-gradient-to-b from-[#0a0a0f] via-[#1a1a2e] to-[#000000] px-4 pt-12 pb-32">
+    <div className="fixed top-5 z-50">
+      {showToast && <Toast message={"Connection Request "+toastMessage}/>}
+    </div>
     <h1 className="text-4xl sm:text-2xl font-bold text-center mb-16 tracking-tight 
                    bg-clip-text text-transparent bg-gradient-to-r from-blue-400  to-white 
                    ">

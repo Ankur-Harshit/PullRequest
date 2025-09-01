@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import UserCard from "./UserCard";
 import axios from "axios";
 import { BASE_URL } from "./utils/constants";
+import Toast from "./components/Toast";
 
 const EditProfile = ({ user }) => {
   const [firstName, setFirstName] = useState(user.firstName);
@@ -13,6 +14,7 @@ const EditProfile = ({ user }) => {
   const [gender, setGender] = useState(user.gender || "");
   const [photoUrl, setPhotourl] = useState(user.photoUrl);
   const [about, setAbout] = useState(user.about || "");
+  const [showToast, setShowToast] = useState(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -29,7 +31,12 @@ const EditProfile = ({ user }) => {
           },
         }
       );
+      setShowToast(true);
       dispatch(addUser(res?.data?.data));
+      setTimeout(()=>{
+        setShowToast(false);
+      }, 3000);
+
     } catch (err) {
       console.log(err.message);
     }
@@ -56,7 +63,9 @@ const EditProfile = ({ user }) => {
 
   return (
     <div className="flex flex-col lg:flex-row justify-center items-start gap-10 p-6 min-h-screen bg-gradient-to-b from-black to-gray-900 text-white">
-      
+      <div className="fixed top-5 z-50">
+        {showToast && <Toast message={"Profile Saved!"}/>}
+      </div>
       {/* Form Section */}
       <div className="w-full max-w-md bg-black/30 backdrop-blur-md border border-gray-700 rounded-2xl p-6 shadow-xl">
         <h2 className="text-3xl font-semibold text-center mb-6 border-b border-fuchsia-500 pb-2">

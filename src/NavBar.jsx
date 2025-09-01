@@ -26,10 +26,16 @@ const NavBar = () => {
   return (
     <div className="navbar bg-base-300 shadow-sm">
   <div className="flex-1">
-    <Link to="/" className="btn btn-ghost text-xl">PullRequest 💗</Link>
+    <Link to="/" className="btn btn-ghost text-xl">PullRequest 🧑‍💻</Link>
   </div>
   <div className="flex gap-2">
-    {user && (<div className="dropdown dropdown-end mx-5">
+    {user && (
+      <div>
+        <span className="border border-yellow-400 text-yellow-500 cursor-pointer 
+                     hover:text-yellow-600 rounded-full text-lg px-4 py-1">
+      Premium
+    </span>
+      <div className="dropdown dropdown-end mx-5">
       <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
         <div className="w-10 rounded-full">
           <img
@@ -50,7 +56,8 @@ const NavBar = () => {
         <li><Link to="/connections">Connections</Link></li>
         <li><a onClick={handleLogout}>Logout</a></li>
       </ul>
-    </div>)}
+    </div>
+  </div>)}
   </div>
 </div>
   )
